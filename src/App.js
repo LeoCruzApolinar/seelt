@@ -1,11 +1,10 @@
-import './App.css';
-import ReproductorTest from './ReproductorTest';
+import React from 'react';
+import Login from './pages/auth/login';
 
 function App() {
   return (
-    <div>
-      <h1>Reproductor</h1>
-      <ReproductorTest/>   
+    <div className="w-screen h-screen bg-blackx">
+      <Login />
     </div>
   );
 }
