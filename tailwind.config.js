@@ -7,7 +7,10 @@ module.exports = {
         'back-movies': "url('./images/background.jpeg')",
       }
     },
+
   },
-  plugins: [],
+  plugins: [
+
+  ],
 }
 

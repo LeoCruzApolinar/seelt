@@ -1,17 +1,19 @@
 import React from 'react';
-import Login from './pages/auth/login';
+import MainPage from "./pages/home/mainPage"
 import { AuthContextProvider, UserAuth } from './context/AuthContext.jsx';
 
 
 function App() {
- // const {user, logOut} =  UserAuth();
+  // const {user, logOut} =  UserAuth();
+  return (
+    <AuthContextProvider>
+      <body className="w-screen h-full min-h-screen bg-[#0d0d0d]">
+        <MainPage />
+      </body>
+    </AuthContextProvider>
 
-  <AuthContextProvider>
-    <div className="w-screen h-screen bg-blackx">
-      <Login />
-    </div>
-  </AuthContextProvider>
-  
+
+  )
 }
 
 export default App;
