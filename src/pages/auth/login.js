@@ -8,7 +8,10 @@ const FullScreenCentered = ({ className }) => (
 const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted');
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log("Correo electrónico:", email);
+    console.log("Contraseña:", password);
   };
 
   return (
