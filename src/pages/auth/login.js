@@ -1,17 +1,27 @@
 import React from 'react';
 import logo from '../../images/logoS.svg';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import FirebaseConfig from '../../api/firebase.config'
+import { LogDeUsuario } from '../../api/SeeltApi';
 
 const FullScreenCentered = ({ className }) => (
   <div className={`fixed w-full h-full flex flex-col justify-center items-center ${className}`} />
 );
 
 const Login = () => {
-  const handleSubmit = (e) => {
+  const auth = getAuth(FirebaseConfig);
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
-    const password = e.target.password.value;
-    console.log("Correo electrónico:", email);
-    console.log("Contraseña:", password);
+    const password = e.target.pass.value;
+    try {
+      const User = await signInWithEmailAndPassword(auth, email, password);
+      await LogDeUsuario(User.user.uid);
+    }
+     catch (error) {
+      console.log(error);
+      alert("Verifique el correo o la contraseña");
+    }
   };
 
   return (
@@ -28,7 +38,7 @@ const Login = () => {
           </div>
           <div className="flex flex-col w-1/2 sm:w-1/4 space-y-1">
             <label className="text-white text-sm sm:text-lg font-thin">Contraseña</label>
-            <input type="password" className="py-2 px-5 rounded-lg" />
+            <input id="pass" type="password" className="py-2 px-5 rounded-lg" />
           </div>
           <p className="text-white text-sm underline cursor-pointer">Olvide mi contraseña</p>
           <p className="text-white text-sm underline cursor-pointer">No tienes una cuenta? Registrate!!</p>

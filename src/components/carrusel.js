@@ -11,7 +11,6 @@ const Carousel = ({ title, images }) => {
       });
     }
   }
-
   return (
     <div className="mt-8 relative">
       <h2 className="text-xl text-white ml-6 font-mono">{title}</h2>

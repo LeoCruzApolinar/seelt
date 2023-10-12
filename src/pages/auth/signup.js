@@ -1,41 +1,21 @@
 import React from 'react';
 import logo from '../../images/logoS.svg';
 import Input from '../../components/input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { ObtenerPaises, ObtenerIdiomas, VerificarUserName, RegistrarUsuario } from '../../api/SeeltApi';
+import FirebaseConfig from '../../api/firebase.config'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+
 
 const FullScreenCentered = ({ className }) => (
   <div className={`fixed w-full h-full flex flex-col justify-center items-center ${className}`}>
   </div>
 );
 
-const inputFields = [
-  { label: 'Nombre', inputType: 'text', name: 'nombre' },
-  { label: 'Apellido', inputType: 'text', name: 'apellido' },
-  { label: 'Usuario', inputType: 'text', name: 'username' },
-  { label: 'Correo electronico', inputType: 'text', name: 'email' },
-  {
-    label: 'Pais',
-    inputType: 'select',
-    name: 'selectPais',
-    options: [
-      { value: 'option1', label: 'Option 1' },
-      { value: 'option2', label: 'Option 2' },
-    ],
-  },
-  {
-    label: 'Idioma',
-    inputType: 'select',
-    name: 'selectIdioma',
-    options: [
-      { value: 'optionA', label: 'Option A' },
-      { value: 'optionB', label: 'Option B' },
-    ],
-  },
-  { label: 'Fecha de Nacimiento', inputType: 'date', name: 'fechaDeNacimiento' },
-  { label: 'Foto de perfil', inputType: 'foto', name: 'foto' },
-];
+const auth = getAuth(FirebaseConfig);
 
 const Signup = () => {
+
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -45,7 +25,60 @@ const Signup = () => {
     selectIdioma: null,
     fechaDeNacimiento: '',
     foto: null,
+    pass: '',
   });
+
+  const [listaDePaises, setListaDePaises] = useState([]);
+  const [listaDeIdiomas, setListaDeIdiomas] = useState([]);
+
+  useEffect(() => {
+    ObtenerPaises()
+      .then(data => {
+
+        setListaDePaises(data);
+      })
+      .catch(error => {
+        console.error('Error', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    ObtenerIdiomas()
+      .then(data => {
+        setListaDeIdiomas(data);
+      })
+      .catch(error => {
+        console.error('Error', error);
+      });
+  }, []);
+
+  const inputFields = [
+    { label: 'Nombre', inputType: 'text', name: 'nombre' },
+    { label: 'Apellido', inputType: 'text', name: 'apellido' },
+    { label: 'Usuario', inputType: 'text', name: 'username' },
+    { label: 'Correo electronico', inputType: 'text', name: 'email' },
+    { label: 'Contraseña', inputType: 'password', name: 'password' },
+    {
+      label: 'Pais',
+      inputType: 'select',
+      name: 'selectPais',
+      options: listaDePaises.map((pais) => ({
+        value: pais.ID.toString(), // Convierte ID a cadena
+        label: pais.NOMBRE,
+      })),
+    },
+    {
+      label: 'Idioma',
+      inputType: 'select',
+      name: 'selectIdioma',
+      options: listaDeIdiomas.map((pais) => ({
+        value: pais.ID.toString(), // Convierte ID a cadena
+        label: pais.NOMBRE,
+      })),
+    },
+    { label: 'Fecha de Nacimiento', inputType: 'date', name: 'fechaDeNacimiento' },
+    { label: 'Foto de perfil', inputType: 'foto', name: 'foto' },
+  ];
 
 
   const handleInputChange = (event) => {
@@ -56,10 +89,44 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+  
+    try {
+      const exists = await VerificarUserName(formData.username);
+  
+      if (exists) {
+        console.log('El nombre de usuario ya existe');
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        console.log(userCredential);
+        const uid = userCredential.user.uid;
+  
+        const nuevoUsuario = {
+          ID_PAIS: formData.selectPais['value'],
+          ID_IDIOMA: formData.selectIdioma['value'],
+          UID: uid,
+          NOMBRES: formData.nombre,
+          APELLIDOS: formData.apellido,
+          DATE_OF_BIRTH: formData.fechaDeNacimiento,
+          USERNAME: formData.username,
+          FOTO: formData.foto,
+        };
+  
+        const registroExitoso = await RegistrarUsuario(nuevoUsuario);
+  
+        if (registroExitoso) {
+          console.log('Usuario registrado exitosamente.');
+        } else {
+          console.error('Error en el registro de usuario.');
+        }
+      }
+    } catch (error) {
+      console.error('Error al registrar al usuario:', error);
+      alert("Verifique el correo o la contraseña");
+    }
   };
+  
 
 
 
