@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../images/logoS.svg';
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import FirebaseConfig from '../../api/firebase.config'
 import { LogDeUsuario } from '../../api/SeeltApi';
 
@@ -18,7 +18,7 @@ const Login = () => {
       const User = await signInWithEmailAndPassword(auth, email, password);
       await LogDeUsuario(User.user.uid);
     }
-     catch (error) {
+    catch (error) {
       console.log(error);
       alert("Verifique el correo o la contraseña");
     }
@@ -26,8 +26,8 @@ const Login = () => {
 
   return (
     <>
-      <FullScreenCentered className="bg-back-movies -z-20" />
-      <FullScreenCentered className="bg-black opacity-90 -z-10" />
+      <FullScreenCentered className="bg-back-movies z-0" />
+      <FullScreenCentered className="bg-black opacity-90 z-20" />
       <div className="fixed z-50 w-full h-full flex flex-col justify-center items-center space-y-10">
         <img className="w-44" src={logo} alt="Logo" />
         <h1 className="text-white text-5xl">Iniciar sesión</h1>

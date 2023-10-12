@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-const Input = ({ label, inputType, name, value, onChange, options }) => {
+const Input = ({ label, inputType, name, value, onChange, options, className }) => {
   const [fileName, setFileName] = useState(null);
 
   const handleSelectChange = selectedOption => {
@@ -32,7 +32,7 @@ const Input = ({ label, inputType, name, value, onChange, options }) => {
   const selectedOption = options?.find(option => option.value === value);
 
   return (
-    <div className="input-group">
+    <div className={`input-group ${className}`}>
       <label htmlFor={name} className='text-white text-sm sm:text-base font-thin'>{label}</label>
       {inputType === 'select' ? (
         <Select

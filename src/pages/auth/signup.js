@@ -77,7 +77,7 @@ const Signup = () => {
       })),
     },
     { label: 'Fecha de Nacimiento', inputType: 'date', name: 'fechaDeNacimiento' },
-    { label: 'Foto de perfil', inputType: 'foto', name: 'foto' },
+    { label: 'Foto de perfil', inputType: 'foto', name: 'foto', className: 'col-span-2' },
   ];
 
 
@@ -91,17 +91,17 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const exists = await VerificarUserName(formData.username);
-  
+
       if (exists) {
         console.log('El nombre de usuario ya existe');
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
         console.log(userCredential);
         const uid = userCredential.user.uid;
-  
+
         const nuevoUsuario = {
           ID_PAIS: formData.selectPais['value'],
           ID_IDIOMA: formData.selectIdioma['value'],
@@ -112,9 +112,9 @@ const Signup = () => {
           USERNAME: formData.username,
           FOTO: formData.foto,
         };
-  
+
         const registroExitoso = await RegistrarUsuario(nuevoUsuario);
-  
+
         if (registroExitoso) {
           console.log('Usuario registrado exitosamente.');
         } else {
@@ -126,14 +126,14 @@ const Signup = () => {
       alert("Verifique el correo o la contraseña");
     }
   };
-  
+
 
 
 
   return (
     <>
-      <FullScreenCentered className="bg-back-movies -z-20" />
-      <FullScreenCentered className="bg-black opacity-90 -z-10" />
+      <FullScreenCentered className="bg-back-movies z-0" />
+      <FullScreenCentered className="bg-black opacity-90 z-20" />
       <div className="relative z-50 w-full h-full flex flex-col justify-center items-center space-y-10">
         <img className="w-44 mt-96 sm:mt-10" src={logo} alt="Logo" />
         <h1 className="text-white text-5xl">Crear cuenta</h1>
@@ -147,6 +147,7 @@ const Signup = () => {
               value={formData[field.name]}
               onChange={handleInputChange}
               options={field.options}
+              className={field.className}
             />
           ))}
           <div className="col-span-full">
