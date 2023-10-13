@@ -4,7 +4,7 @@ import Input from '../../components/input';
 import { useState, useEffect } from 'react';
 import { ObtenerPaises, ObtenerIdiomas, VerificarUserName, RegistrarUsuario } from '../../api/SeeltApi';
 import FirebaseConfig from '../../api/firebase.config'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -107,6 +107,7 @@ const Signup = () => {
       } else {
         console.log(formData)
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        await signInWithEmailAndPassword(auth, formData.email, formData.password);
         console.log(userCredential);
         const uid = userCredential.user.uid;
 
@@ -125,6 +126,7 @@ const Signup = () => {
 
         if (registroExitoso) {
           console.log('Usuario registrado exitosamente.');
+          navigate('/');
         } else {
           console.error('Error en el registro de usuario.');
         }
@@ -135,7 +137,9 @@ const Signup = () => {
     }
   };
 
-
+  const NavegarHome = () => {
+    navigate('/');
+  };
 
 
   return (
@@ -143,7 +147,7 @@ const Signup = () => {
       <FullScreenCentered className="bg-back-movies z-0" />
       <FullScreenCentered className="bg-black opacity-90 z-20" />
       <div className="relative z-50 w-full h-full flex flex-col justify-center items-center space-y-10">
-        <img className="w-44 mt-96 sm:mt-10" src={logo} alt="Logo" />
+        <img onClick={NavegarHome}  className="w-44 mt-96 sm:mt-10" src={logo} alt="Logo" />
         <h1 className="text-white text-5xl">Crear cuenta</h1>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-3/4 md:w-1/2 lg:w-1/3">
           {inputFields.map(field => (

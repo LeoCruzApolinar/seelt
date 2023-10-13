@@ -11,11 +11,29 @@ const Navbar = () => {
   const NavegarLogin = () => {
     navigate('/login'); // Redirige al usuario a la página de inicio de sesión
   };
+  const NavegarHome = () => {
+    navigate('/'); // Redirige al usuario a la página de inicio de sesión
+  };
 
   return (
     <div className="bg-black w-full fixed top-0 left-0 flex justify-between items-center p-4 px-10 z-50">
       <div>
-        <img className="w-12" src={logo} alt="Logo" />
+      <img
+        onClick={NavegarHome}
+        className="w-12"
+        src={logo}
+        alt="Logo"
+        style={{
+          cursor: 'pointer', // Cambia el cursor al puntero en el hover
+          transition: 'transform 0.2s', // Agrega una transición suave a la transformación
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)'; // Escala la imagen en el hover
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'scale(1)'; // Restaura la escala original al salir del hover
+        }}
+      />
       </div>
       <div className="flex sm:space-x-4">
         {["Series", "Peliculas", "Videos"].map((label, index) => (

@@ -9,14 +9,17 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
+import AddIcon from '@mui/icons-material/Add';
 import Logout from '@mui/icons-material/Logout';
-import { ObtenerDatosUsuario } from '../api/SeeltApi';
+import { ObtenerDatosUsuario, ObtenerCanalPorUID } from '../api/SeeltApi';
 import { useState, useEffect } from 'react';
 // Importa el módulo de autenticación de Firebase
 import { useAuth } from '../context/AuthContext'; // Asegúrate de que esta importación sea correcta
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
-  const { user } = useAuth(); 
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -36,8 +39,13 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
+  const CrearC = () => {
+    navigate('/crearcanal');
+  };
+
 
   const [DatosUsuario, setDatosUsuario] = useState([]);
+  const [CanalUsuario, setCanalUsuario] = useState({});
 
   useEffect(() => {
     ObtenerDatosUsuario(user.uid)
@@ -49,12 +57,23 @@ export default function AccountMenu() {
         console.error('Error', error);
       });
   }, []);
-  
+
+  useEffect(() => {
+    ObtenerCanalPorUID(user.uid)
+      .then(data => {
+        setCanalUsuario(data);
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error', error);
+      });
+  }, []);
+
 
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-      <Typography sx={{ minWidth: 100, color: 'white' }}>{'@'+DatosUsuario.UserName}</Typography>
+        <Typography sx={{ minWidth: 100, color: 'white' }}>{'@' + DatosUsuario.UserName}</Typography>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -103,15 +122,26 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Canal
-        </MenuItem>
-        <Divider />
+        {CanalUsuario.CANAL_EXISTE ? (
+          <>
+            <MenuItem onClick={handleClose}>
+              <Avatar src={CanalUsuario.FOTO_LOGO} /> {CanalUsuario.NOMBRE}
+            </MenuItem>
+            <Divider />
+          </>
+        ) : (
+          <MenuItem onClick={handleClose, CrearC}>
+            <ListItemIcon>
+              <AddIcon fontSize="small" />
+            </ListItemIcon>
+            Crear un canal
+          </MenuItem>
+        )}
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Configuracion
+          Editar perfil
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

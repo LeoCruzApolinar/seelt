@@ -9,6 +9,7 @@ import Signup from './pages/auth/signup';
 //Modulos firebas
 import Login from './pages/auth/login';
 import { AuthProvider } from './context/AuthContext';
+import CrearCanal from './pages/editar-perfil/CrearCanal';
 
 
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/crearcanal" element={<CrearCanal />} />
         </Routes>
       </body>
     </Router>

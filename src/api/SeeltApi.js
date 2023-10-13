@@ -54,3 +54,11 @@ export function ObtenerDatosUsuario(UID) {
       return response.data;
     });
 }
+
+
+export function ObtenerCanalPorUID(UID) {
+  return axios.get(`https://localhost:7092/ObtenerCanalPorIdUsuario?UID=${UID}`)
+    .then((response) => {
+      return response.data;
+    });
+}
