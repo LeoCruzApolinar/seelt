@@ -1,19 +1,19 @@
 import axios from 'axios';
 
 export function ObtenerPaises() {
-  return axios.get("https://localhost:7092/api/General/ObtenerPaises").then((response) => {
+  return axios.get("https://seeltapi20231013140255.azurewebsites.net/api/General/ObtenerPaises").then((response) => {
     return response.data;
   });
 }
 
 export function ObtenerIdiomas() {
-  return axios.get("https://localhost:7092/api/General/ObtenerIdiomas").then((response) => {
+  return axios.get("https://seeltapi20231013140255.azurewebsites.net/api/General/ObtenerIdiomas").then((response) => {
     return response.data;
   });
 }
 
 export function VerificarUserName(username) {
-  return axios.get(`https://localhost:7092/api/General/VerificarUserName?username=${username}`)
+  return axios.get(`https://seeltapi20231013140255.azurewebsites.net/api/General/VerificarUserName?username=${username}`)
     .then((response) => {
       return response.data;
     });
@@ -31,7 +31,7 @@ export function RegistrarUsuario(usuario) {
   formData.append('USERNAME', usuario.USERNAME);
   formData.append('FOTO', usuario.FOTO);
 
-  return axios.post('https://localhost:7092/RegistrarUsuario', formData)
+  return axios.post('https://seeltapi20231013140255.azurewebsites.net/RegistrarUsuario', formData)
     .then((response) => {
       return response.data; // Esto podría ser 'true' o 'false' según la respuesta de tu controlador.
     })
@@ -42,14 +42,14 @@ export function RegistrarUsuario(usuario) {
 }
 
 export function LogDeUsuario(UID) {
-  return axios.post(`https://localhost:7092/LogUsuario?UID=${UID}`)
+  return axios.post(`https://seeltapi20231013140255.azurewebsites.net/LogUsuario?UID=${UID}`)
     .then((response) => {
       return response.data;
     });
 }
 
 export function ObtenerDatosUsuario(UID) {
-  return axios.get(`https://localhost:7092/ObtenerDatosUsuario?UID=${UID}`)
+  return axios.get(`https://seeltapi20231013140255.azurewebsites.net/ObtenerDatosUsuario?UID=${UID}`)
     .then((response) => {
       return response.data;
     });
@@ -57,7 +57,7 @@ export function ObtenerDatosUsuario(UID) {
 
 
 export function ObtenerCanalPorUID(UID) {
-  return axios.get(`https://localhost:7092/ObtenerCanalPorIdUsuario?UID=${UID}`)
+  return axios.get(`https://seeltapi20231013140255.azurewebsites.net/ObtenerCanalPorIdUsuario?UID=${UID}`)
     .then((response) => {
       return response.data;
     });
