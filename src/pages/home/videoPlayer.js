@@ -86,7 +86,6 @@ const VideoPlayer = () => {
               </div>
             </div>
             <div className='w-1/4 '>
-              {/*likes and subscribe button here */}
               <div className='ml-10 sm:ml-2 flex my-2 space-x-4 justify-center items-center'>
                 <LikeButton />
                 <SubscribeButton />

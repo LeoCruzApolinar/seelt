@@ -5,12 +5,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from "./pages/home/mainPage"
 import Signup from './pages/auth/signup';
 import VideoPlayer from './pages/home/videoPlayer';
+import CrearCanal from './pages/editar-perfil/CrearCanal';
+import SubsPage from './pages/home/subs';
+import Perfil from './pages/editar-perfil/perfil';
 
 
 //Modulos firebas
 import Login from './pages/auth/login';
 import { AuthProvider } from './context/AuthContext';
-import CrearCanal from './pages/editar-perfil/CrearCanal';
+
 
 
 
@@ -25,6 +28,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/crearcanal" element={<CrearCanal />} />
             <Route path="/video" element={<VideoPlayer />} />
+            <Route path="/subs" element={<SubsPage />} />
+            <Route path="/perfil" element={<Perfil />} />
           </Routes>
         </body>
       </Router>
