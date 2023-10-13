@@ -30,7 +30,7 @@ function App() {
             <Route path="/crearcanal" element={<CrearCanal />} />
             <Route path="/video/:videoId" element={<VideoPlayer />} />
             <Route path="/subs" element={<SubsPage />} />
-            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/perfil/:uid" element={<Perfil />} />
             <Route path="/allvideos" element={<AllVideos />} />
           </Routes>
         </body>

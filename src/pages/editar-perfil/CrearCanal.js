@@ -4,8 +4,12 @@ import Input from '../../components/input';
 import { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar';
 import WebPageEmbed from '../../components/WebPageEmbed ';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const CrearCanal = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         nombre: '',
         Descripcion: '',
@@ -20,13 +24,74 @@ const CrearCanal = () => {
         { label: 'Logo', inputType: 'foto', name: 'fotoL', className: 'col-span-2' },
     ];
 
+    const [shouldSubmit, setShouldSubmit] = useState(false);
+    const { user } = useAuth();
+
+    useEffect(() => {
+        if (!shouldSubmit) {
+            return;
+        }
+
+        // Create FormData for HTTP request
+        const httpFormData = new FormData();
+        httpFormData.append('UID', user.uid);
+        httpFormData.append('Nombre', formData.nombre);
+        httpFormData.append('Descripcion', formData.Descripcion);
+        httpFormData.append('FotoPortada', formData.fotoP);
+        httpFormData.append('FotoLogo', formData.fotoL);
+
+        // Perform POST request with fetch
+        fetch('https://seeltapi20231013140255.azurewebsites.net/RegistrarCanal', {
+            method: 'POST',
+            body: httpFormData
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Canal creado:', data);
+                setShouldSubmit(false);
+                if (data === true) {
+                    navigate(`/perfil/${user.uid}`);
+                } else {
+                    console.error('Error: Canal no pudo ser creado');
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error creando el canal:', error);
+                setShouldSubmit(false);
+            });
+
+    }, [shouldSubmit, formData, user.uid]);
+
+
+
+
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const { name, type } = event.target;
+        let value;
+
+        if (type === 'file') {
+            value = event.target.files[0];
+        } else {
+            value = event.target.value;
+        }
+
         setFormData({
             ...formData,
             [name]: value
         });
     };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setShouldSubmit(true);
+    };
+
 
     return (
         <div className={styles.container}>
@@ -49,19 +114,21 @@ const CrearCanal = () => {
                 </div>
 
                 <div className={styles.ContenedorInput}>
-                    {inputFields.map(field => (
-                        <Input
-                            key={field.name}
-                            label={field.label}
-                            inputType={field.inputType}
-                            name={field.name}
-                            value={formData[field.name]}
-                            onChange={handleInputChange}
-                            options={field.options}
-                            className={field.className}
-                        />
-                    ))}
-                    <button type="submit" className="bg-[#FF7043] text-xl w-full text-white py-4 px-8 rounded-lg mt-10">Crear</button>
+                    <form onSubmit={handleSubmit}>
+                        {inputFields.map(field => (
+                            <Input
+                                key={field.name}
+                                label={field.label}
+                                inputType={field.inputType}
+                                name={field.name}
+                                value={formData[field.name]}
+                                onChange={handleInputChange}
+                                options={field.options}
+                                className={field.className}
+                            />
+                        ))}
+                        <button type="submit" className="bg-[#FF7043] text-xl w-full text-white py-4 px-8 rounded-lg mt-10">Crear</button>
+                    </form>
                 </div>
             </div>
             <div className={styles.right}>
