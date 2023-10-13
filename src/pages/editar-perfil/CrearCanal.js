@@ -66,7 +66,7 @@ const CrearCanal = () => {
             </div>
             <div className={styles.right}>
                 <div className={styles.subContenedor}>
-                <WebPageEmbed/>
+                    <WebPageEmbed channelData={formData} />
                 </div>
             </div>
         </div>

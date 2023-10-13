@@ -1,60 +1,66 @@
 /* EditarPerfil.module.css */
 .container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
 }
 
 .left {
-    flex: 3; /* 60% */
-    background-color: #0d0d0d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  flex: 3; /* 60% */
+  background-color: #0d0d0d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .right {
-    flex: 3; /* 40% */
-    background-color: #34495E;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+  flex: 3; /* 40% */
+  background-color: #202020;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .ContenedorInput {
-    width: 400px;
+  width: 400px;
 }
 
 .waviy {
-    position: relative;
-    font-size: 60px;
-    padding-bottom: 30PX;
+  position: relative;
+  font-size: 60px;
+  padding-bottom: 30px;
 }
 
 .waviy span {
-    font-family: 'Alfa Slab One', cursive;
-    position: relative;
-    display: inline-block;
-    color: #fff;
-    text-transform: uppercase;
-    animation: waviy 1s infinite;
-    animation-delay: calc(.1s * var(--i));
+  font-family: "Alfa Slab One", cursive;
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  text-transform: uppercase;
+  animation: waviy 1s infinite;
+  animation-delay: calc(0.1s * var(--i));
 }
 
 @keyframes waviy {
-    0%, 40%, 100% {
-        transform: translateY(0)
-    }
-    20% {
-        transform: translateY(-20px)
-    }
+  0%,
+  40%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-20px);
+  }
 }
 
-.subContenedor
-{
-    width: 700px;
-    margin: 20px;
-    padding-top: 124px;
+.subContenedor {
+  width: 700px;
+  margin: 20px;
+  padding-top: 124px;
+}
+
+.nonInteractive {
+  pointer-events: none;
+  user-select: none;
 }

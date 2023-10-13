@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar';
 import YouTubeCard from '../../components/cardVideo'
+import styles from './CrearCanal.module.css';
 import Modal from '../../components/modal';
 import PostCard from '../../components/post';
 import PostForm from '../../components/postForm';
 import VideoForm from '../../components/videoForm';
 
 
-const Perfil = () => {
+const Perfil = ({ isPreviewMode, channelData }) => {
   const [isVideoActive, setIsVideoActive] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);  // State to control modal visibility
   const [videoList, setVideoList] = useState([
@@ -180,22 +181,49 @@ const Perfil = () => {
 
 
 
-
-
-
   return (
-    <div className="w-full h-full bg-[#0d0d0d] pt-20">
+    <div className={`w-full h-full bg-[#0d0d0d] pt-20 ${isPreviewMode ? styles.nonInteractive : ''}`}>
       <Navbar />
       <div className="relative">
-        {/* Banner Image with placeholder */}
-        <div className="w-full h-60 bg-cover bg-center" style={{ backgroundImage: 'url(https://placekitten.com/1200/400)' }}></div>
-        {/* Profile Image with placeholder */}
-        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-32 h-32 rounded-full bg-cover bg-center border-4 border-white" style={{ backgroundImage: 'url(https://placekitten.com/200/200)' }}></div>
+        {/* Banner Image */}
+        <div className="w-full h-60 bg-cover bg-center"
+          style={{
+            backgroundImage: isPreviewMode
+              ? (channelData.fotoP
+                ? `url(${URL.createObjectURL(channelData.fotoP)})`
+                : 'url(https://placekitten.com/1000/1000)')
+              : 'url(https://placekitten.com/1000/1000)'
+          }}
+        ></div>
+        {/* Profile Image            `*/}
+        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-32 h-32 rounded-full bg-cover bg-center border-4 border-white"
+          style={{
+            backgroundImage: isPreviewMode
+              ? (channelData.fotoL
+                ? `url(${URL.createObjectURL(channelData.fotoL)})`
+                : 'url(https://placekitten.com/200/200)')
+              : 'url(https://placekitten.com/200/200)'
+          }}
+        ></div>
+
       </div>
       {/* Channel Name */}
       <div className="mt-14 mb-8 text-center">
-        <h1 className="text-3xl font-bold font-mono text-white">Channel Name</h1>
+        <h1 className="text-3xl font-bold font-mono text-white">
+          {isPreviewMode
+            ? (channelData.nombre ? channelData.nombre : "Nombre del canal!!")
+            : "nombre normal"}
+        </h1>
       </div>
+      {/* Channel Description */}
+      <div className="mt-14 mb-8 text-center">
+        <h1 className="text-sm font-bold font-mono text-white">
+          {isPreviewMode
+            ? (channelData.Descripcion ? channelData.Descripcion : "Descripción del canal!!")
+            : "Descripción del canal"}
+        </h1>
+      </div>
+
       {/* Double Button */}
       <div className="flex justify-center mx-4 my-4">
         <div className="flex ml-auto pl-24">
@@ -219,7 +247,6 @@ const Perfil = () => {
           >
             {isVideoActive ? 'New Video' : 'New Post'}
           </button>
-          {/* ... rest of your code ... */}
           <Modal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleFormSubmit}>
             {/* Conditionally render VideoForm or PostForm based on isVideoActive */}
             {isVideoActive ? <VideoForm onClose={handleCloseModal} onSubmit={handleFormSubmit} /> : <PostForm onClose={handleCloseModal} onSubmit={handleFormSubmit} />}
