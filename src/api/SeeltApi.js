@@ -62,3 +62,10 @@ export function ObtenerCanalPorUID(UID) {
       return response.data;
     });
 }
+
+export function GetTipoDeVideoAsJSON() {
+  return axios.get(`https://seeltapi20231013140255.azurewebsites.net/api/General/GetTipoDeVideoAsJSON`)
+    .then((response) => {
+      return response.data;
+    });
+}
