@@ -1,14 +1,16 @@
 import React from 'react';
 import logo from '../../images/logoS.svg';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import FirebaseConfig from '../../api/firebase.config'
+import FirebaseConfig from '../../api/firebase.config';
 import { LogDeUsuario } from '../../api/SeeltApi';
+import { useNavigate } from 'react-router-dom';
 
 const FullScreenCentered = ({ className }) => (
   <div className={`fixed w-full h-full flex flex-col justify-center items-center ${className}`} />
 );
 
 const Login = () => {
+
   const auth = getAuth(FirebaseConfig);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,11 +19,19 @@ const Login = () => {
     try {
       const User = await signInWithEmailAndPassword(auth, email, password);
       await LogDeUsuario(User.user.uid);
+      navigate('/');
     }
     catch (error) {
       console.log(error);
       alert("Verifique el correo o la contraseña");
     }
+  };
+
+
+  const navigate = useNavigate();
+
+  const NavegarSignup = () => {
+    navigate('/signup'); // Redirige al usuario a la página de inicio de sesión
   };
 
   return (
@@ -40,8 +50,13 @@ const Login = () => {
             <label className="text-white text-sm sm:text-lg font-thin">Contraseña</label>
             <input id="pass" type="password" className="py-2 px-5 rounded-lg" />
           </div>
-          <p className="text-white text-sm underline cursor-pointer">Olvide mi contraseña</p>
-          <p className="text-white text-sm underline cursor-pointer">No tienes una cuenta? Registrate!!</p>
+          <p className="text-white text-sm underline cursor-pointer hover:text-[#0196eb]">Olvide mi contraseña</p>
+          <p
+            onClick={NavegarSignup}
+            className="text-white text-sm underline cursor-pointer transition hover:text-[#0196eb]"
+          >
+            No tienes una cuenta? Registrate!!
+          </p>
           <button type="submit" className="bg-[#0196eb] text-xl w-fit text-white py-2 px-8 rounded-lg mt-5">Acceder</button>
         </form>
       </div>

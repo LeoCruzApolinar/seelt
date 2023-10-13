@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -8,25 +7,14 @@ import Signup from './pages/auth/signup';
 
 
 //Modulos firebas
-import FirebaseConfig from './api/firebase.config';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Login from './pages/auth/login';
-const auth = getAuth(FirebaseConfig);
+import { AuthProvider } from './context/AuthContext';
+
 
 
 function App() {
-  const [usuario, setUsuario] = useState(null);
-  onAuthStateChanged(auth, (usuarioFirebase) => {
-    if (usuarioFirebase) {
-      setUsuario(usuarioFirebase)
-    }
-    else {
-      setUsuario(null);
-    }
-
-  });
-
   return (
+    <AuthProvider>
     <Router>
       <body className="w-screen h-full min-h-screen bg-[#0d0d0d] -z-10">
         <Routes>
@@ -36,6 +24,7 @@ function App() {
         </Routes>
       </body>
     </Router>
+    </AuthProvider>
   )
 }
 

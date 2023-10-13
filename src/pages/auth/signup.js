@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { ObtenerPaises, ObtenerIdiomas, VerificarUserName, RegistrarUsuario } from '../../api/SeeltApi';
 import FirebaseConfig from '../../api/firebase.config'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 const FullScreenCentered = ({ className }) => (
@@ -27,6 +28,12 @@ const Signup = () => {
     foto: null,
     pass: '',
   });
+
+  const navigate = useNavigate();
+
+  const NavegarLgin = () => {
+    navigate('/login'); // Redirige al usuario a la página de inicio de sesión
+  };
 
   const [listaDePaises, setListaDePaises] = useState([]);
   const [listaDeIdiomas, setListaDeIdiomas] = useState([]);
@@ -98,6 +105,7 @@ const Signup = () => {
       if (exists) {
         console.log('El nombre de usuario ya existe');
       } else {
+        console.log(formData)
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
         console.log(userCredential);
         const uid = userCredential.user.uid;
@@ -152,7 +160,7 @@ const Signup = () => {
           ))}
           <div className="col-span-full">
             <button type="submit" className="bg-[#0196eb] text-xl w-full text-white py-2 px-8 rounded-lg mt-5">Acceder</button>
-            <p className="text-white text-sm underline cursor-pointer mt-2">Ya tengo cuenta!</p>
+            <p onClick={NavegarLgin} className="text-white text-sm underline cursor-pointer mt-2 hover:text-[#0196eb]">Ya tengo cuenta!</p>
           </div>
         </form>
       </div>
