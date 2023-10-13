@@ -1,58 +1,59 @@
-import React, { useEffect, useRef, useState } from 'react';
-import shaka from 'shaka-player';
+import React, { useEffect, useRef } from 'react';
+import 'shaka-player/dist/controls.css';
+import shaka from 'shaka-player/dist/shaka-player.ui.js';
 
-const MediaPlayer = ({ url }) => {
+function VideoPlayer({ url }) {
+  const videoContainerRef = useRef(null);
   const videoRef = useRef(null);
-  const [tracks, setTracks] = useState([]);
-  const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    const newPlayer = new shaka.Player(videoRef.current);
-    setPlayer(newPlayer);
+    // Check for browser support
+    if (!shaka.Player.isBrowserSupported()) {
+      console.error('Browser not supported!');
+      return;
+    }
 
-    newPlayer.load(url).then(() => {
-      console.log('Video exitoso');
-      const availableTracks = newPlayer.getVariantTracks();
-      setTracks(availableTracks);
-    }).catch(error => {
-      console.error('Error', error.code, 'object', error);
-    });
+    // Install polyfills
+    shaka.polyfill.installAll();
+
+    // Create a new player
+    const player = new shaka.Player(videoRef.current);
+
+    // Create UI
+    const ui = new shaka.ui.Overlay(player, videoContainerRef.current, videoRef.current);
+
+    // Configure UI - add the 'quality' control
+    const config = {
+      'controlPanelElements': ['play_pause', 'mute', 'volume', 'time_and_duration', 'fullscreen', 'quality'],
+    };
+    ui.configure(config);
+
+    // Listen for errors
+    player.addEventListener('error', onErrorEvent);
+
+    // Load the manifest
+    player.load(url).catch(onError);
 
     return () => {
-      newPlayer.unload();
+      ui.destroy();
+      player.destroy();
     };
+
+    function onErrorEvent(event) {
+      onError(event.detail);
+    }
+
+    function onError(error) {
+      console.error('Error code', error.code, 'object', error);
+    }
+
   }, [url]);
 
-  const changeQuality = (value) => {
-    if (value === 'auto') {
-      if (player) {
-        player.configure({ abr: { enabled: true } });
-      }
-    } else {
-      const trackId = Number(value);
-      const track = tracks.find(t => t.id === trackId);
-      if (track && player) {
-        player.configure({ abr: { enabled: false } });
-        player.selectVariantTrack(track);
-      }
-    }
-  };
-
-
-
   return (
-    <div>
-      <video ref={videoRef} width="640" controls></video>
-      <select onChange={(e) => changeQuality(e.target.value)}>
-        <option value="auto">Auto</option>
-        {tracks.length > 0 ? tracks.map(track => (
-          <option key={track.id} value={track.id}>
-            {`${track.height}p`}
-          </option>
-        )) : <option>No data</option>}
-      </select>
+    <div ref={videoContainerRef} className=" w-full">
+      <video ref={videoRef} width="100%"></video>
     </div>
   );
-};
+}
 
-export default MediaPlayer;
+export default VideoPlayer;
