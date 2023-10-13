@@ -151,7 +151,7 @@ const Perfil = () => {
             });
             };*/
 
-  const handleFormSubmit = (title, description, file, thumbnailFile, audioFile, subtitleFile, tags) => {
+  const handleFormSubmit = (title, description, file, thumbnailFile, audioFile, subtitleFile, tags, videoType) => {
     if (isVideoActive) {
       const newVideo = {
         channelName: "new chanel",
@@ -162,6 +162,7 @@ const Perfil = () => {
         audioFile: audioFile instanceof File ? URL.createObjectURL(audioFile) : null,
         subtitleFile: subtitleFile instanceof File ? URL.createObjectURL(subtitleFile) : null,
         tags: tags,
+        type: videoType
       };
       setVideoList([newVideo, ...videoList]);  // Update videoList with new video
       console.log(newVideo)

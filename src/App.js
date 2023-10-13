@@ -8,6 +8,7 @@ import VideoPlayer from './pages/home/videoPlayer';
 import CrearCanal from './pages/editar-perfil/CrearCanal';
 import SubsPage from './pages/home/subs';
 import Perfil from './pages/editar-perfil/perfil';
+import AllVideos from './pages/home/allVideos';
 
 
 //Modulos firebas
@@ -27,9 +28,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/crearcanal" element={<CrearCanal />} />
-            <Route path="/video" element={<VideoPlayer />} />
+            <Route path="/video/:videoId" element={<VideoPlayer />} />
             <Route path="/subs" element={<SubsPage />} />
             <Route path="/perfil" element={<Perfil />} />
+            <Route path="/allvideos" element={<AllVideos />} />
           </Routes>
         </body>
       </Router>

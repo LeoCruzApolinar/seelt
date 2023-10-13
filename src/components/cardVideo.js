@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-function YouTubeCard({ videoThumbnail, videoTitle, channelName }) {
+function YouTubeCard({ videoThumbnail, videoTitle, channelName, videoId }) {
   const cardStyle = {
     maxWidth: '100%',
   };
@@ -13,24 +14,26 @@ function YouTubeCard({ videoThumbnail, videoTitle, channelName }) {
   };
 
   return (
-    <div
-      className="rounded overflow-hidden shadow-lg m-4 transform transition-transform duration-300 hover:-translate-y-2 bg-white"
-      style={cardStyle}
-    >
-      <img
-        style={imageStyle}
-        src={videoThumbnail || "https://via.placeholder.com/1000"}
-        alt="Video thumbnail"
-      />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xs sm:text-base mb-2 truncate text-black" title={videoTitle}>
-          {videoTitle}
+    <Link to={`/video/${videoId}`} style={{ textDecoration: 'none' }}>
+      <div
+        className="rounded overflow-hidden shadow-lg m-4 transform transition-transform duration-300 hover:-translate-y-2 bg-white"
+        style={cardStyle}
+      >
+        <img
+          style={imageStyle}
+          src={videoThumbnail || "https://via.placeholder.com/1000"}
+          alt="Video thumbnail"
+        />
+        <div className="px-6 py-4">
+          <div className="font-bold text-xs sm:text-base mb-2 truncate text-black" title={videoTitle}>
+            {videoTitle}
+          </div>
+          <p className="text-gray-700 text-xs sm:text-sm">
+            {channelName}
+          </p>
         </div>
-        <p className="text-gray-700 text-xs sm:text-sm">
-          {channelName}
-        </p>
       </div>
-    </div>
+    </Link>
   );
 }
 

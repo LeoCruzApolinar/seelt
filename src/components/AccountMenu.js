@@ -33,6 +33,7 @@ export default function AccountMenu() {
     // Llama a la función de cierre de sesión al hacer clic en el botón "Logout"
     signout();
     handleClose(); // Cierra el menú después de cerrar la sesión
+    navigate('/login');
   };
 
   const handleClose = () => {
