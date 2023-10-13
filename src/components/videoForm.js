@@ -10,6 +10,7 @@ const VideoForm = ({ onClose, onSubmit }) => {
   const [tags, setTags] = useState([]);
   const [currentTag, setCurrentTag] = useState('');
   const [tagColor, setTagColor] = useState('#000000');
+  const [videoType, setVideoType] = useState('');
 
   const handleAddTag = () => {
     if (currentTag) {
@@ -21,7 +22,7 @@ const VideoForm = ({ onClose, onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(title, description, videoFile, thumbnailFile, audioFile, subtitleFile, tags);
+    onSubmit(title, description, videoFile, thumbnailFile, audioFile, subtitleFile, tags, videoType);
   };
 
   return (
@@ -57,6 +58,20 @@ const VideoForm = ({ onClose, onSubmit }) => {
           <div>
             <label className="font-bold block" htmlFor="subtitleFile">Subtitle File:</label>
             <input type="file" accept=".vtt" onChange={(e) => setSubtitleFile(e.target.files[0])} id="subtitleFile" className="border p-2 rounded-lg w-full" />
+          </div>
+          <div>
+            <label className="font-bold block" htmlFor="videoType">Type:</label>
+            <select
+              value={videoType}
+              onChange={(e) => setVideoType(e.target.value)}
+              id="videoType"
+              className="border p-2 rounded-lg w-full"
+              required
+            >
+              <option value="" disabled>Select Type</option>
+              <option value="pelicula">Películas</option>
+              <option value="video">Videos</option>
+            </select>
           </div>
         </div>
 
