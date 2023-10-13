@@ -208,10 +208,10 @@ const Perfil = ({ isPreviewMode, channelData }) => {
             backgroundImage: isPreviewMode
               ? (channelData && channelData.fotoP
                 ? `url(${URL.createObjectURL(channelData.fotoP)})`
-                : 'url(https://placekitten.com/1000/1000)')
+                : 'url(https://placeholder.com/1000/1000)')
               : (dataChannel && dataChannel.FOTO_PORTADA
                 ? `url(${dataChannel.FOTO_PORTADA})`
-                : 'url(https://placekitten.com/1000/1000)')
+                : 'url(https://placeholder.com/1000/1000)')
           }}
         ></div>
         {/* Profile Image`*/}
@@ -220,10 +220,10 @@ const Perfil = ({ isPreviewMode, channelData }) => {
             backgroundImage: isPreviewMode
               ? (channelData && channelData.fotoL
                 ? `url(${URL.createObjectURL(channelData.fotoL)})`
-                : 'url(https://placekitten.com/1000/1000)')
+                : 'url(https://placeholder.com/1000x1000)')
               : (dataChannel && dataChannel.FOTO_LOGO
                 ? `url(${dataChannel.FOTO_LOGO})`
-                : 'url(https://placekitten.com/1000/1000)')
+                : 'url(https://placeholder.com/1000x1000)')
           }}
         ></div>
       </div>
