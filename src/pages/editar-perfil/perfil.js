@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar';
 import YouTubeCard from '../../components/cardVideo'
 import styles from './CrearCanal.module.css';
@@ -6,10 +6,14 @@ import Modal from '../../components/modal';
 import PostCard from '../../components/post';
 import PostForm from '../../components/postForm';
 import VideoForm from '../../components/videoForm';
+import { useParams } from 'react-router-dom';
 
 
 const Perfil = ({ isPreviewMode, channelData }) => {
+  const { uid } = useParams();
   const [isVideoActive, setIsVideoActive] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);  // State to control modal visibility
   const [videoList, setVideoList] = useState([
     {
@@ -110,12 +114,28 @@ const Perfil = ({ isPreviewMode, channelData }) => {
 
   //fetch para obtener los datos de los post: 
 
-  /*   useEffect(() => {
-      fetch('https://your-api-url.com/posts')
-        .then(response => response.json())
-        .then(data => setPostList(data))
-        .catch(error => console.error('Error fetching data:', error));
-    }, []);*/
+  const [dataChannel, setChannelData] = useState(null);
+
+  useEffect(() => {
+    // Replace the URL with your actual endpoint
+    const apiUrl = `https://seeltapi20231013140255.azurewebsites.net/ObtenerCanalPorIdUsuario?UID=${uid}`;
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setChannelData(data);
+        setLoading(false); // Set loading to false once the data is fetched
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false); // Even in case of an error, set loading to false
+      });
+  }, [uid]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -178,9 +198,6 @@ const Perfil = ({ isPreviewMode, channelData }) => {
     setIsModalOpen(false);  // Close modal
   };
 
-
-
-
   return (
     <div className={`w-full h-full bg-[#0d0d0d] pt-20 ${isPreviewMode ? styles.nonInteractive : ''}`}>
       <Navbar />
@@ -189,30 +206,33 @@ const Perfil = ({ isPreviewMode, channelData }) => {
         <div className="w-full h-60 bg-cover bg-center"
           style={{
             backgroundImage: isPreviewMode
-              ? (channelData.fotoP
+              ? (channelData && channelData.fotoP
                 ? `url(${URL.createObjectURL(channelData.fotoP)})`
-                : 'url(https://placekitten.com/1000/1000)')
-              : 'url(https://placekitten.com/1000/1000)'
+                : 'url(https://placeholder.com/1000/1000)')
+              : (dataChannel && dataChannel.FOTO_PORTADA
+                ? `url(${dataChannel.FOTO_PORTADA})`
+                : 'url(https://placeholder.com/1000/1000)')
           }}
         ></div>
-        {/* Profile Image            `*/}
+        {/* Profile Image`*/}
         <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-32 h-32 rounded-full bg-cover bg-center border-4 border-white"
           style={{
             backgroundImage: isPreviewMode
-              ? (channelData.fotoL
+              ? (channelData && channelData.fotoL
                 ? `url(${URL.createObjectURL(channelData.fotoL)})`
-                : 'url(https://placekitten.com/200/200)')
-              : 'url(https://placekitten.com/200/200)'
+                : 'url(https://placeholder.com/1000x1000)')
+              : (dataChannel && dataChannel.FOTO_LOGO
+                ? `url(${dataChannel.FOTO_LOGO})`
+                : 'url(https://placeholder.com/1000x1000)')
           }}
         ></div>
-
       </div>
       {/* Channel Name */}
       <div className="mt-14 mb-8 text-center">
         <h1 className="text-3xl font-bold font-mono text-white">
           {isPreviewMode
             ? (channelData.nombre ? channelData.nombre : "Nombre del canal!!")
-            : "nombre normal"}
+            : dataChannel && <h1>{dataChannel.NOMBRE}</h1>}
         </h1>
       </div>
       {/* Channel Description */}
@@ -220,7 +240,7 @@ const Perfil = ({ isPreviewMode, channelData }) => {
         <h1 className="text-sm font-bold font-mono text-white">
           {isPreviewMode
             ? (channelData.Descripcion ? channelData.Descripcion : "Descripción del canal!!")
-            : "Descripción del canal"}
+            : dataChannel && <h1>{dataChannel.DESCRIPCION}</h1>}
         </h1>
       </div>
 
@@ -249,7 +269,7 @@ const Perfil = ({ isPreviewMode, channelData }) => {
           </button>
           <Modal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleFormSubmit}>
             {/* Conditionally render VideoForm or PostForm based on isVideoActive */}
-            {isVideoActive ? <VideoForm onClose={handleCloseModal} onSubmit={handleFormSubmit} /> : <PostForm onClose={handleCloseModal} onSubmit={handleFormSubmit} />}
+            {isVideoActive ? <VideoForm onClose={handleCloseModal} onSubmit={handleFormSubmit} canal={dataChannel.NOMBRE} /> : <PostForm onClose={handleCloseModal} onSubmit={handleFormSubmit} />}
           </Modal>
         </div>
       </div>

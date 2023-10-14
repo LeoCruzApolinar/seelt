@@ -9,13 +9,14 @@ import SubscribeButton from '../../components/subButton';
 import YouTubeCard from '../../components/cardVideo';
 import CommentSection from '../../components/comment';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 
 const VideoPlayer = () => {
-
+  const navigate = useNavigate();
 
   const { videoId } = useParams();
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -63,11 +64,15 @@ const VideoPlayer = () => {
         </div>
       </div>
       <div className='relative pt-20 w-full md:w-1/2 grid grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-1 '>
-        {videoData.map((video, index) => (
+        {videoData.map((video) => (
           <YouTubeCard
-            key={index}
+            key={video.id}
             videoTitle={video.videoTitle}
             channelName={video.channelName}
+            videoId={video.id}
+            onClick={() => {
+              navigate(`/video/${video.id}`);
+            }}
           />
         ))}
       </div>

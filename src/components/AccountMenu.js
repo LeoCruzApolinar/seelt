@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react';
 // Importa el módulo de autenticación de Firebase
 import { useAuth } from '../context/AuthContext'; // Asegúrate de que esta importación sea correcta
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function AccountMenu() {
   const navigate = useNavigate();
@@ -125,7 +126,7 @@ export default function AccountMenu() {
       >
         {CanalUsuario.CANAL_EXISTE ? (
           <>
-            <MenuItem onClick={handleClose}>
+            <MenuItem component={Link} to={`/perfil/${user.uid}`} onClick={handleClose}>
               <Avatar src={CanalUsuario.FOTO_LOGO} /> {CanalUsuario.NOMBRE}
             </MenuItem>
             <Divider />
