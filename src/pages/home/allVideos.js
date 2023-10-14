@@ -11,7 +11,7 @@ const AllVideos = () => {
   const categoria = query.get('categoria');
 
   const [visibleVideos, setVisibleVideos] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(20); // inicia mostrando 20 elementos
+  const [currentIndex, setCurrentIndex] = useState(20);
 
   const filteredVideos = videoData.filter(video =>
     video.type.toLowerCase() === categoria.toLowerCase()
@@ -23,16 +23,13 @@ const AllVideos = () => {
 
   useEffect(() => {
     const loadMoreVideos = () => {
-      // Verifica si el usuario ha hecho scroll hasta el final de la página
       if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-      // Incrementa currentIndex para cargar más videos
       setCurrentIndex(prevState => prevState + 20);
     };
 
     window.addEventListener('scroll', loadMoreVideos);
-    // Limpia el event listener al desmontar el componente
     return () => window.removeEventListener('scroll', loadMoreVideos);
-  }, [currentIndex]); // El useEffect se ejecutará cada vez que currentIndex cambie
+  }, [currentIndex]);
 
   return (
     <div className="w-full h-full">

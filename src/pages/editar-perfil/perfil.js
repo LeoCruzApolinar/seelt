@@ -269,7 +269,7 @@ const Perfil = ({ isPreviewMode, channelData }) => {
           </button>
           <Modal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleFormSubmit}>
             {/* Conditionally render VideoForm or PostForm based on isVideoActive */}
-            {isVideoActive ? <VideoForm onClose={handleCloseModal} onSubmit={handleFormSubmit} /> : <PostForm onClose={handleCloseModal} onSubmit={handleFormSubmit} />}
+            {isVideoActive ? <VideoForm onClose={handleCloseModal} onSubmit={handleFormSubmit} canal={dataChannel.NOMBRE} /> : <PostForm onClose={handleCloseModal} onSubmit={handleFormSubmit} />}
           </Modal>
         </div>
       </div>
