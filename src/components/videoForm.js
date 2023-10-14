@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-
-const VideoForm = ({ onClose, onSubmit }) => {
+import React, { useState, useEffect  } from 'react';
+import { GetTipoDeVideoAsJSON, CrearEtiqueta, procesarVideoGeneral } from '../api/SeeltApi';
+import { useAuth } from '../context/AuthContext';
+const VideoForm = ({ onClose, onSubmit, canal}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [videoFile, setVideoFile] = useState(null);
@@ -11,19 +12,49 @@ const VideoForm = ({ onClose, onSubmit }) => {
   const [currentTag, setCurrentTag] = useState('');
   const [tagColor, setTagColor] = useState('#000000');
   const [videoType, setVideoType] = useState('');
+  const [options, setOptions] = useState([]);
+
+
+  const { user } = useAuth(); 
 
   const handleAddTag = () => {
     if (currentTag) {
+      const textoSinHashtags = tagColor.replace(/#/g, '');
+      CrearEtiqueta(user.uid, currentTag, textoSinHashtags);
       setTags([...tags, { text: currentTag, color: tagColor }]);
       setCurrentTag('');
       setTagColor('#000000');
     }
   };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(title, description, videoFile, thumbnailFile, audioFile, subtitleFile, tags, videoType);
+    console.log(videoFile, title, description, canal, user.uid, thumbnailFile, videoType);
+    procesarVideoGeneral(videoFile, title, description, canal, user.uid, thumbnailFile, videoType)
+    .then((response) => {
+      // Manejo de la respuesta aquí
+      console.log(response);
+    })
+    .catch((error) => {
+      // Manejo de errores aquí
+      console.error(error);
+    });
+    
   };
+
+  useEffect(() => {
+    // Llamar a la función para obtener las opciones
+    GetTipoDeVideoAsJSON()
+      .then((data) => {
+        // Establecer las opciones en el estado
+        console.log(data)
+        setOptions(data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener las opciones:', error);
+      });
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="p-4 bg-white rounded-lg shadow-lg max-w-2xl mx-auto">
@@ -32,7 +63,7 @@ const VideoForm = ({ onClose, onSubmit }) => {
         <div className="col-span-1 flex flex-col space-y-4">
           <div>
             <label className="font-bold block" htmlFor="videoFile">Upload Video:</label>
-            <input type="file" accept=".m3u8" onChange={(e) => setVideoFile(e.target.files[0])} id="videoFile" className="border p-2 rounded-lg w-full" required />
+            <input type="file" accept="video/*" onChange={(e) => setVideoFile(e.target.files[0])} id="videoFile" className="border p-2 rounded-lg w-full" required />
           </div>
           <div>
             <label className="font-bold block" htmlFor="title">Title:</label>
@@ -69,8 +100,11 @@ const VideoForm = ({ onClose, onSubmit }) => {
               required
             >
               <option value="" disabled>Select Type</option>
-              <option value="pelicula">Películas</option>
-              <option value="video">Videos</option>
+              {options.map((option) => (
+                <option key={option.NOMBRE} value={option.ID}>
+                  {option.NOMBRE}
+                </option>
+              ))}
             </select>
           </div>
         </div>

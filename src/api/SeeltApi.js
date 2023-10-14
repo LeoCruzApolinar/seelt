@@ -69,3 +69,42 @@ export function GetTipoDeVideoAsJSON() {
       return response.data;
     });
 }
+
+export function CrearEtiqueta(nombreCanal, nombre, color) {
+  console.log(nombreCanal, nombre, color);
+  return axios.post(`https://seeltapi20231013140255.azurewebsites.net/CrearEtiqueta?NombreCanal=${nombreCanal}&NombreEtiqueta=${nombre}&Color=${color}`)
+  .then((response) => {
+    return response.data;
+  });
+}
+
+
+export function ProcesarSolicitudVideo(formData) {
+  return axios.post("https://localhost:7156/api/Videos/ProcesarSolicitudVideoGeneral", formData)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      // Manejo de errores aquí.
+      console.error(error);
+    });
+}
+
+
+export function procesarVideoGeneral(archivoVideo, tituloVideo, descripcion, nombreCanal, UID, urlMiniatura, tipoVideo, Etiquetas) {
+  const formData = new FormData();
+  formData.append('ArchivoVideo', archivoVideo);
+  formData.append('TituloVideo', tituloVideo);
+  formData.append('Descripcion', descripcion);
+  formData.append('NombreCanal', nombreCanal);
+  formData.append('UID', UID);
+  formData.append('URL_Miniatura', urlMiniatura);
+  formData.append('TipoVideo', tipoVideo);
+  formData.append('etiquetas', Etiquetas);
+
+  return ProcesarSolicitudVideo(formData);
+}
+
+
+
+

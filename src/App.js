@@ -24,7 +24,7 @@ function App() {
       <Router>
         <body className="w-screen h-full min-h-screen bg-[#0d0d0d] -z-10">
           <Routes>
-            <Route path="/" element={<MainPage />} />
+            <Route path="/" element={<Perfil />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/crearcanal" element={<CrearCanal />} />
